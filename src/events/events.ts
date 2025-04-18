@@ -42,10 +42,11 @@ export async function forwardEvent(req: Request): Promise<void> {
     if (req.header('x-infracost-trace-id') != null) {
       headers['x-infracost-trace-id'] = req.header('x-infracost-trace-id');
     }
-
-    await axios.post(`${config.infracostDashboardApiEndpoint}/event`, body, {
-      headers,
-    });
+    // disable phone home
+    config.logger.info("disable phone home");
+    // await axios.post(`${config.infracostDashboardApiEndpoint}/event`, body, {
+    //   headers,
+    // });
   } catch (err) {
     config.logger.error(`Error forwarding event to Infracost API: ${err}`);
   }
@@ -57,22 +58,24 @@ export async function sendEvent(event: string, env?: any): Promise<void> {
   }
 
   try {
-    await axios.post(
-      `${config.infracostDashboardApiEndpoint}/event`,
-      {
-        event,
-        env: {
-          cloudPricingAPIVersion: process.env.npm_package_version,
-          ...(env || {}),
-        },
-      },
-      {
-        headers: {
-          'X-Api-Key': config.infracostAPIKey || '',
-          'X-Cloud-Pricing-Api-Version': process.env.npm_package_version || '',
-        },
-      }
-    );
+    config.logger.info("disable phone home");
+    // disable phone home
+    // await axios.post(
+    //   `${config.infracostDashboardApiEndpoint}/event`,
+    //   {
+    //     event,
+    //     env: {
+    //       cloudPricingAPIVersion: process.env.npm_package_version,
+    //       ...(env || {}),
+    //     },
+    //   },
+    //   {
+    //     headers: {
+    //       'X-Api-Key': config.infracostAPIKey || '',
+    //       'X-Cloud-Pricing-Api-Version': process.env.npm_package_version || '',
+    //     },
+    //   }
+    // );
   } catch (err) {
     config.logger.error(`Error sending event to Infracost API: ${err}`);
   }

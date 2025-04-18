@@ -1,3 +1,7 @@
+> [!NOTE]  
+> This is a clone of the original repository and is not connected to Infracost!
+> Do not use for production workloads, dependencies and implementation are heavily outdated.
+
 # Cloud Pricing API
 
 <a href="https://www.infracost.io/community-chat"><img alt="Community Slack channel" src="https://img.shields.io/badge/chat-Slack-%234a154b"/></a> <a href="https://hub.docker.com/r/infracost/cloud-pricing-api/tags"><img alt="Docker Image" src="https://img.shields.io/badge/docker-passing-brightgreen"/></a> <a href="https://infracost.io/docs/cloud_pricing_api/overview"><img alt="Docs" src="https://img.shields.io/badge/docs-blue"/></a> <a href="https://twitter.com/intent/tweet?text=Open%20source%20GraphQL%20API%20for%20cloud%20pricing.%20Contains%20over%203M%20public%20prices%20from%20AWS%2C%20Azure%20and%20GCP!&url=https://github.com/infracost/cloud-pricing-api&hashtags=cloud,price,aws,azure,gcp"><img alt="Tweet" src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"/></a>

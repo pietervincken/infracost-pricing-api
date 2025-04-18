@@ -9,9 +9,9 @@
     "postbuild": "copyfiles -u 1 src/views/**/** dist && copyfiles -u 1 src/public/**/** dist",
     "start": "node dist/server.js",
     "db:setup": "node dist/cmd/dbSetup.js",
-    "data:scrape": "node dist/cmd/dataScrape.js",
+    "data:scrape": "node dist/cmd/dataScrape.js --only=aws:bulk",
     "data:dump": "node dist/cmd/dataDump.js",
-    "data:download": "node dist/cmd/dataDownload.js",
+    "data:download": "echo 'skipped: node dist/cmd/dataDownload.js'",
     "data:load": "node dist/cmd/dataLoad.js",
     "data:status": "node dist/cmd/dataStatus.js",
     "job:init": "npm run db:setup && npm run job:update",
@@ -25,7 +25,8 @@
     "job:init:dev": "npm run db:setup:dev && npm run job:update:dev",
     "job:update:dev": "npm run data:download:dev && npm run data:load:dev",
     "lint": "eslint --ext .ts,.js --ignore-path .gitignore .",
-    "format": "prettier --write 'src/**/*.{js,ts}'"
+    "format": "prettier --write 'src/**/*.{js,ts}'",
+    "job:init:offline": "npm run db:setup && npm run data:load"
   },
   "author": "Infracost",
   "license": "Apache-2.0",
@@ -37,7 +38,6 @@
   ],
   "dependencies": {
 
-    "@ibm-cloud/platform-services": "^0.30.1",
     "@graphql-tools/schema": "^9.0.12",
     "@graphql-tools/utils": "^9.1.3",
     "apollo-server-core": "^3.11.0",

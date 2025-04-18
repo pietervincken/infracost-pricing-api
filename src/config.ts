@@ -86,10 +86,10 @@ const config = {
   installsTableName: 'installs',
   infracostPricingApiEndpoint:
     process.env.INFRACOST_PRICING_API_ENDPOINT ||
-    'https://pricing.api.infracost.io',
+    'https://example.com',
   infracostDashboardApiEndpoint:
     process.env.INFRACOST_DASHBOARD_API_ENDPOINT ||
-    'https://dashboard.api.infracost.io',
+    'https://example.com',
   disableTelemetry:
     process.env.DISABLE_TELEMETRY?.toLowerCase() === 'true' ||
     process.env.DISABLE_TELEMETRY === '1',
@@ -100,7 +100,6 @@ const config = {
   gcpApiKey: process.env.GCP_API_KEY,
   gcpKeyFile: generateGcpKeyFile(),
   gcpProject: process.env.GCP_PROJECT,
-  ibmCloudApiKey: process.env.IBM_CLOUD_API_KEY,
 };
 
 export default config;

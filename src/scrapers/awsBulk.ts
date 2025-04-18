@@ -89,7 +89,7 @@ type ServiceJson = {
 };
 
 async function scrape(): Promise<void> {
-  await downloadAll();
+  // await downloadAll();
   await loadAll();
 }
 
@@ -100,11 +100,11 @@ async function downloadAll() {
     await downloadService(offer);
   }
 
-  // Download AWS China regions
-  indexResp = await axios.get(`${baseUrl}${chinaIndexUrl}`);
-  for (const offer of <Offer[]>Object.values(indexResp.data.offers)) {
-    await downloadService(offer, 'awscn');
-  }
+  // // Download AWS China regions
+  // indexResp = await axios.get(`${baseUrl}${chinaIndexUrl}`);
+  // for (const offer of <Offer[]>Object.values(indexResp.data.offers)) {
+  //   await downloadService(offer, 'awscn');
+  // }
 }
 
 interface Offer {
