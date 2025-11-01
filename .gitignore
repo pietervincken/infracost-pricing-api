@@ -1,5 +1,6 @@
 /node_modules
 /data
+/data-copy
 /creds
 .env
 .env.sh
@@ -17,3 +18,5 @@
 # IDE
 .idea/
 .vscode/
+
+.DS_Store

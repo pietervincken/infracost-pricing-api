@@ -9,7 +9,7 @@
     "postbuild": "copyfiles -u 1 src/views/**/** dist && copyfiles -u 1 src/public/**/** dist",
     "start": "node dist/server.js",
     "db:setup": "node dist/cmd/dbSetup.js",
-    "data:scrape": "node dist/cmd/dataScrape.js --only=aws:bulk",
+    "data:scrape": "node dist/cmd/dataScrape.js",
     "data:dump": "node dist/cmd/dataDump.js",
     "data:download": "echo 'skipped: node dist/cmd/dataDownload.js'",
     "data:load": "node dist/cmd/dataLoad.js",
@@ -93,6 +93,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/infracost/cloud-pricing-api.git"
+    "url": "git+https://github.com/pietervincken/cloud-pricing-api.git"
   }
 }

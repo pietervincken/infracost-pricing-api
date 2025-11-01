@@ -5,7 +5,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    image: infracost/cloud-pricing-api:latest # Latest stable release
+    image: pietervincken/cloud-pricing-api:local # Latest stable release
     ports: 
         - 4000:4000
     environment:
@@ -20,62 +20,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    depends_on: [postgres]
+    depends_on: [postgres, init_db]
     networks:
       - cloud_pricing_api
-
-  setup_job:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: infracost/cloud-pricing-api:latest # Latest stable release
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_DB=cloud_pricing
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
-    volumes:
-      - $PWD/data:/usr/src/app/data
-    depends_on: [postgres]
-    networks:
-      - cloud_pricing_api
-    command: ["npm", "run", "job:init:offline"]
-
-  # init_job:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   image: infracost/cloud-pricing-api:latest # Latest stable release
-  #   environment:
-  #     - POSTGRES_HOST=postgres
-  #     - POSTGRES_DB=cloud_pricing
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
-  #   volumes:
-  #     - $PWD/data:/usr/src/app/data
-  #   depends_on: [postgres]
-  #   networks:
-  #     - cloud_pricing_api
-  #   command: ["npm", "run", "job:init:offline"]
-
-  # Cron: Add a cron job to run every week to update the database data. The cron entry should look something like:
-  # # 0 4 * * SUN docker-compose run --rm update_job npm run job:update >> /var/log/cron.log 2>&1
-  # update_job:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   image: infracost/cloud-pricing-api:latest # Latest stable release
-  #   environment:
-  #     - POSTGRES_HOST=postgres
-  #     - POSTGRES_DB=cloud_pricing
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
-  #   depends_on: [postgres]
-  #   volumes:
-  #     - $PWD/data:/usr/src/app/data
-  #   networks:
-  #     - cloud_pricing_api
-  #   command: ["npm", "run", "data:scrape"]
 
   postgres:
     image: postgres:13
@@ -94,7 +41,77 @@ services:
       - postgres-data:/var/lib/postgresql/data/
     networks:
       - cloud_pricing_api
- 
+
+  init_db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pietervincken/cloud-pricing-api:local # Latest stable release
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=cloud_pricing
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    depends_on: [postgres]
+    volumes:
+      - $PWD/data:/usr/src/app/data
+    networks:
+      - cloud_pricing_api
+    command: ["npm", "run", "db:setup"] 
+
+  load_job:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pietervincken/cloud-pricing-api:local # Latest stable release
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=cloud_pricing
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - $PWD/data:/usr/src/app/data
+    depends_on: [postgres, init_db]
+    networks:
+      - cloud_pricing_api
+    command: ["npm", "run", "data:load"]
+
+  # Cron: Add a cron job to run every week to update the database data. The cron entry should look something like:
+  # # 0 4 * * SUN docker-compose run --rm update_job npm run job:update >> /var/log/cron.log 2>&1
+  update_job:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pietervincken/cloud-pricing-api:local # Latest stable release
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=cloud_pricing
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    depends_on: [postgres]
+    volumes:
+      - $PWD/data:/usr/src/app/data
+    networks:
+      - cloud_pricing_api
+    command: ["npm", "run", "data:scrape", "--", "--only=aws:bulk,azure:retail"]
+
+  dump_job:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pietervincken/cloud-pricing-api:local # Latest stable release
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=cloud_pricing
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    depends_on: [postgres]
+    volumes:
+      - $PWD/data:/usr/src/app/data
+    networks:
+      - cloud_pricing_api
+    command: ["npm", "run", "data:dump"]
+
 volumes:
   postgres-data:
 
