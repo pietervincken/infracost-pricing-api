@@ -15,8 +15,9 @@ async function run(): Promise<void> {
       client = await pool.connect();
       break;
     } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : String(e);
       config.logger.error(
-        `Waiting for PostgreSQL to become available: ${e.message}`
+        `Waiting for PostgreSQL to become available: ${errorMessage}`
       );
       await new Promise((resolve) => {
         setTimeout(resolve, backOffSecs * 1000);
