@@ -90,9 +90,7 @@ const config = {
   infracostDashboardApiEndpoint:
     process.env.INFRACOST_DASHBOARD_API_ENDPOINT ||
     'https://example.com',
-  disableTelemetry:
-    process.env.DISABLE_TELEMETRY?.toLowerCase() === 'true' ||
-    process.env.DISABLE_TELEMETRY === '1',
+  disableTelemetry: true, // Telemetry has been disabled
   infracostAPIKey: process.env.INFRACOST_API_KEY,
   selfHostedInfracostAPIKey: process.env.SELF_HOSTED_INFRACOST_API_KEY,
   cache,

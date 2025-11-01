@@ -34,7 +34,7 @@ async function run() {
       }
     );
   } catch (e) {
-    if (e.response?.status === 403) {
+    if (e instanceof Error && 'response' in e && (e as any).response?.status === 403) {
       config.logger.error(
         'You do not have permission to download data. Please set a valid INFRACOST_API_KEY.'
       );
@@ -42,7 +42,8 @@ async function run() {
         'A new key can be obtained by installing the infracost CLI and running "infracost auth login".  The key is usually saved in ~/.config/infracost/credentials.yml'
       );
     } else {
-      config.logger.error(`There was an error downloading data: ${e.message}`);
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      config.logger.error(`There was an error downloading data: ${errorMessage}`);
     }
     process.exit(1);
   }
